@@ -1,0 +1,78 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MyShop - Online Store</title>
+<style>
+body{margin:0;font-family:Arial;background:#fff5f8;color:#333}
+header{background:#fff;padding:20px;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:26px;font-weight:bold;color:#9b42b5}
+.hero{text-align:center;padding:55px 15px;background:linear-gradient(120deg,#a18cd1,#fbc2eb);color:white}
+.hero h1{font-size:38px}
+button{background:#9b42b5;color:white;border:0;padding:12px 18px;border-radius:8px;cursor:pointer}
+section{padding:25px}
+.products{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px}
+.card{background:white;border-radius:12px;padding:15px;text-align:center;box-shadow:0 3px 12px #ddd}
+.card img{width:100%;height:150px;object-fit:cover;border-radius:8px}
+.price{color:#9b42b5;font-weight:bold}
+#cart{background:white;border-radius:12px;margin:20px}
+footer{text-align:center;padding:20px;background:#34243d;color:white}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">MyShop ✨</div>
+<div>🛍️ My Online Store</div>
+</header>
+<div class="hero">
+<h1>Welcome to MyShop!</h1>
+<p>Discover your favourite products at great prices.</p>
+<button onclick="document.getElementById('products').scrollIntoView()">Shop Now</button>
+</div>
+<section id="products">
+<h2 style="text-align:center">🌸 Our Products</h2>
+<div class="products" id="product-list"></div>
+</section>
+<section id="cart">
+<h2>🛒 My Cart (<span id="count">0</span>)</h2>
+<div id="cart-items">Your cart is empty.</div>
+<h3>Total: ₹<span id="total">0</span></h3>
+</section>
+<footer>Made with ❤️ | MyShop 2026</footer>
+<script>
+const products=[
+{id:1,name:"Stylish Shoes",price:1299,image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400"},
+{id:2,name:"Smart Watch",price:1599,image:"https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400"},
+{id:3,name:"Handbag",price:899,image:"https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=400"},
+{id:4,name:"Headphones",price:999,image:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400"}
+];
+let cart=[];
+function showProducts(){
+document.getElementById("product-list").innerHTML=products.map(p=>`
+<div class="card">
+<img src="${p.image}" alt="${p.name}">
+<h3>${p.name}</h3>
+<p class="price">₹${p.price}</p>
+<button onclick="addCart(${p.id})">Add to Cart</button>
+</div>`).join("");
+}
+function addCart(id){
+const p=products.find(x=>x.id===id);
+const item=cart.find(x=>x.id===id);
+if(item)item.qty++;else cart.push({...p,qty:1});
+showCart();
+}
+function showCart(){
+document.getElementById("count").textContent=cart.reduce((s,p)=>s+p.qty,0);
+document.getElementById("total").textContent=cart.reduce((s,p)=>s+p.price*p.qty,0);
+document.getElementById("cart-items").innerHTML=cart.length?
+cart.map(p=>`<p>${p.name} × ${p.qty} — ₹${p.price*p.qty}
+<button onclick="removeCart(${p.id})">Remove</button></p>`).join(""):"Your cart is empty.";
+}
+function removeCart(id){cart=cart.filter(p=>p.id!==id);showCart();}
+showProducts();showCart();
+</script>
+</body>
+</html>
